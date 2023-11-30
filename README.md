@@ -6,7 +6,7 @@
 python3 -m venv .venv
 source .venv/bin/activate
 poetry init
-poetry add 'fastapi[all]' loguru python-decouple
+poetry add 'fastapi[all]' 'fastapi-users[sqlalchemy,oauth]' aiosqlite loguru python-decouple
 poetry run uvicorn app.main:app --reload
 ```
 
