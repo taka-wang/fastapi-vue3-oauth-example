@@ -8,29 +8,29 @@
 import { onMounted, ref } from "vue";
 import useFastAPIUsersOAuth from "@/composables/useFastAPIUsersOAuth.js";
 
-const { parseCallbackParams, triggerBackendCallback } = useFastAPIUsersOAuth();
-const backendCallbackEndpoint = import.meta.env
-  .VITE_BACKEND_GOOGLE_CALLBACK_URL;
+const accessToken = ref("");
 
-const handleOAuthCallback = async () => {
+// Handle OAuth callback or normal page behavior
+const exampleCallbackHandle = async () => {
   try {
-    const { state, code, error } = await parseCallbackParams();
+    // Check if the state parameter is present in the URL
+    const stateParam = new URLSearchParams(window.location.search).get("state");
 
-    if (error) {
-      console.log("Normal about page, do nothing...");
-      return;
+    if (stateParam) {
+      accessToken.value = await useFastAPIUsersOAuth().handleOAuthCallback(
+        import.meta.env.VITE_BACKEND_GOOGLE_CALLBACK_URL
+      );
+
+      if (accessToken.value) {
+        console.log(`%cAccess Token: ${accessToken.value}`, "color: lime");
+      }
+    } else {
+      console.log("Normal about page");
     }
-
-    const accessToken = await triggerBackendCallback(
-      backendCallbackEndpoint,
-      state,
-      code
-    );
-    console.log(`%cAccess Token: ${accessToken}`, "color: lime");
   } catch (error) {
-    console.warn("Error during OAuth callback:", error);
+    console.error("Error handling OAuth callback:", error);
   }
 };
 
-onMounted(handleOAuthCallback);
+onMounted(exampleCallbackHandle);
 </script>

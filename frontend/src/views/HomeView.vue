@@ -1,15 +1,13 @@
 <template>
   <div class="main">
     <h1>This is the main page</h1>
-    <GoogleAuthenticationButton :backendAuthEndpoint="backendAuthEndpoint" />
+    <GoogleAuthButton :backendAuthEndpoint="authUrl" />
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import GoogleAuthenticationButton from "@/components/GoogleAuthenticationButton.vue";
-
-const backendAuthEndpoint = ref(import.meta.env.VITE_BACKEND_GOOGLE_AUTH_URL);
+import GoogleAuthButton from "@/components/GoogleAuthButton.vue";
+const authUrl = import.meta.env.VITE_BACKEND_GOOGLE_AUTH_URL;
 </script>
 
 <style>
